@@ -6,7 +6,11 @@ import {
   UPDATE_PLAN_MUTATION,
 } from "../../graphql/mutations";
 import { GET_ALL_PLANS } from "../../graphql/query";
-import useProductStore from "../../store/globalStore";
+import {useProductStore} from "../../store/globalStore";
+interface Product {
+  id: string;
+  name: string;
+}
 type Plan = {
   id: string;
   name: string;
@@ -19,7 +23,7 @@ type Plan = {
   trialPeriodDays: number;
   createdAt: string;
   updatedAt: string;
-  
+  products: Product[];
 };
 
 type PlansQueryData = {
@@ -29,27 +33,34 @@ interface PlanFormProps {
   plan?: Plan;
 }
 const PlanForm: React.FC<PlanFormProps> = ({ plan }) => {
-  const [name, setName] = useState(plan?.name ?? "");
-  const [description, setDescription] = useState(plan?.description ?? "");
-  const [price, setPrice] = useState<number | undefined>(plan?.price);
-  const [duration, setDuration] = useState<number | undefined>(plan?.duration);
-  const [status, setStatus] = useState(plan?.status ?? "ACTIVE");
-  const [billingCycle, setBillingCycle] = useState(plan?.billingCycle ?? "");
-  const [autoRenew, setAutoRenew] = useState(plan?.autoRenew ?? true);
-  const [trialPeriodDays, setTrialPeriodDays] = useState<number | undefined>(
-    plan?.trialPeriodDays
-  );
-  const { selectProductIds } = useProductStore();
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState<number | undefined>();
+  const [duration, setDuration] = useState<number | undefined>();
+  const [status, setStatus] = useState("ACTIVE");
+  const [billingCycle, setBillingCycle] = useState("");
+  const [autoRenew, setAutoRenew] = useState(true);
+  const [trialPeriodDays, setTrialPeriodDays] = useState<number | undefined>();
+
+  useEffect(() => {
+    if (plan) {
+      setName(plan.name ?? "");
+      setDescription(plan.description ?? "");
+      setPrice(plan.price);
+      setDuration(plan.duration);
+      setStatus(plan.status?.toUpperCase() ?? "ACTIVE");
+      setBillingCycle(plan.billingCycle ?? "");
+      setAutoRenew(plan.autoRenew ?? true);
+      setTrialPeriodDays(plan.trialPeriodDays);
+    }
+  }, [plan]);
+  const { selectProductIds, selectedProductIds } = useProductStore();
   useEffect(() => {
     // If the plan prop has productIds, select those products in the store
-    if (plan?.productIds) {
-      selectProductIds(plan.productIds);
-    } else {
-      // If there is no plan or the plan doesn't include productIds,
-      // you might want to clear the selection or handle it differently
-      // For example, to clear the selection, you could call a store action like:
-      // clearSelectedProductIds();
-    }
+    const productIds = plan?.products?.map((product) => product.id) ?? [];
+    console.log("ProductIDs", productIds);
+    // Use the array of productIds to select products in the store
+    selectProductIds(productIds);
   }, [plan, selectProductIds]);
   // Using the useMutation hook to initiate the create plan mutation
   const [createPlan, { loading, error }] = useMutation(CREATE_PLAN_MUTATION, {
@@ -72,26 +83,10 @@ const PlanForm: React.FC<PlanFormProps> = ({ plan }) => {
   });
 
   const [updatePlan, { loading: updateLoading, error: updateError }] =
-    useMutation(UPDATE_PLAN_MUTATION, {
-      update(cache, { data: { updatePlan } }) {
-        // Fetch the plans from the cache
-        const existingPlans = cache.readQuery<PlansQueryData>({
-          query: GET_ALL_PLANS,
-        });
-
-        // Add the new plan to the cache
-        if (existingPlans && updatePlan) {
-          cache.writeQuery({
-            query: GET_ALL_PLANS,
-            data: {
-              findPlans: [...existingPlans.findPlans, updatePlan],
-            },
-          });
-        }
-      },
-    });
+    useMutation(UPDATE_PLAN_MUTATION);
 
   const handleCreatePlan = async () => {
+    console.log("Clicked");
     const planData = {
       autoRenew,
       billingCycle,
@@ -104,24 +99,16 @@ const PlanForm: React.FC<PlanFormProps> = ({ plan }) => {
       productIds: selectedProductIds,
     };
     if (plan) {
-      try {
-        const response = await updatePlan({
-          variables: { id: plan.id, planData },
-          // Additional options like refetchQueries or optimisticResponse could be included here
-        });
-        // Process successful creation, like showing a message or redirecting
-        console.log("Updated Plan", response.data);
-      } catch (e) {
-        // Process error, like showing an error message
-      }
+      const response = await updatePlan({
+        variables: { updatePlanId: plan.id, planData },
+        // Additional options like refetchQueries or optimisticResponse could be included here
+      });
+      // Process successful creation, like showing a message or redirecting
+      console.log("Updated Plan", response.data);
     } else {
-      try {
-        const response = await createPlan({ variables: { planData } });
-        // Process successful creation, like showing a message or redirecting
-        console.log("Created Plan", response.data);
-      } catch (e) {
-        // Process error, like showing an error message
-      }
+      const response = await createPlan({ variables: { planData } });
+      // Process successful creation, like showing a message or redirecting
+      console.log("Created Plan", response.data);
     }
   };
 
@@ -264,11 +251,12 @@ const PlanForm: React.FC<PlanFormProps> = ({ plan }) => {
 
           <button
             disabled={isLoading}
+            type="submit"
             className="flex items-center justify-center w-full gap-2 p-3 font-medium rounded bg-primary text-gray"
           >
             <span> {plan ? "Update Plan" : "Create Plan"}</span>
             <span>
-              {loading ? (
+              {isLoading ? (
                 <div role="status">
                   <svg
                     aria-hidden="true"

@@ -1,3 +1,4 @@
+import DropdownNotification from "../../DropdownNotification";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 
 const Header = (props: {
@@ -99,7 +100,7 @@ const Header = (props: {
               {/* <!-- Dark Mode Toggler --> */}
   
               {/* <!-- Notification Menu Area --> */}
-              {/* <DropdownNotification /> */}
+              <DropdownNotification />
               {/* <!-- Notification Menu Area --> */}
   
               {/* <!-- Chat Notification Area --> */}

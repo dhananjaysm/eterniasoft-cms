@@ -53,33 +53,26 @@ export const GET_SUBS_COUNT_QUERY = gql`
 `;
 
 export const GET_PLAN_QUERY = gql`
- query FindPlan($planId: String!) {
-  findPlan(planId: $planId) {
-    id
-    name
-    description
-    price
-    duration
-    status
-    billingCycle
-    autoRenew
-    trialPeriodDays
-    products {
+  query FindPlan($planId: String!) {
+    findPlan(planId: $planId) {
       id
       name
-      price
       description
-      maxUsers
-      productFeatures {
+      price
+      duration
+      status
+      billingCycle
+      autoRenew
+      trialPeriodDays
+      createdAt
+      updatedAt
+      products {
         id
         name
       }
     }
-    createdAt
-    updatedAt
   }
-}
-`
+`;
 
 export const GET_ALL_PLANS = gql`
   query FindPlans {
@@ -112,6 +105,53 @@ export const GET_ALL_PRODUCTS = gql`
         name
       }
       createdAt
+    }
+  }
+`;
+
+export const GET_ALL_USERS = gql`
+  query FindAllUsers {
+    findAllUsers {
+      id
+      username
+      email
+      firstName
+      lastName
+      department
+      roles
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_ALL_REQUESTS = gql`
+  query GetAllRequests {
+    getAllRequests {
+      id
+      requestType
+      user {
+        id
+        email
+        username
+      }
+      plan {
+        id
+        name
+      }
+
+      approvals {
+        id
+        approved
+        approver {
+          id
+          email
+          username
+        }
+      }
+      status
+      createdAt
+      updatedAt
     }
   }
 `;

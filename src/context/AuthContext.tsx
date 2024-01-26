@@ -5,7 +5,9 @@ interface AuthContextProps {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   authToken: string;
   setAuthToken: (token: string) => void;
-  clearAuthToken:() => void
+  clearAuthToken: () => void;
+  userId: string;
+  setUserId: (userId: string) => void;
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -17,26 +19,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false); //FIXME: Make it false
   const [authToken, setAuthToken] = useState("");
+  const [userId, setUserId] = useState("");
   const setAndStoreAuthToken = (token: string) => {
     setAuthToken(token);
     localStorage.setItem("authToken", token); // Store token in local storage
     setIsAuthenticated(true);
   };
+
+  const setAndStoreUserId = (userId: string) => {
+    setUserId(userId);
+    localStorage.setItem("userId", userId);
+  };
   useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
-    if (storedToken) {
+    const storedUserId = localStorage.getItem("userId");
+
+    if (storedToken && storedUserId) {
       setAuthToken(storedToken);
+      setUserId(storedUserId);
+
       setIsAuthenticated(true);
     }
   }, []);
-  
 
   const clearAuthToken = () => {
-    setAuthToken('');
-    localStorage.removeItem('authToken');
+    setAuthToken("");
+    localStorage.removeItem("authToken");
     setIsAuthenticated(false);
   };
-  
+
   return (
     <AuthContext.Provider
       value={{
@@ -44,7 +55,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsAuthenticated,
         authToken,
         setAuthToken: setAndStoreAuthToken,
-        clearAuthToken
+        clearAuthToken,
+        userId,
+        setUserId: setAndStoreUserId,
       }}
     >
       {children}

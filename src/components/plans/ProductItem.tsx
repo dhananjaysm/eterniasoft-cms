@@ -1,4 +1,4 @@
-import useProductStore from "../../store/globalStore";
+import {useProductStore} from "../../store/globalStore";
 export interface ProductFeature {
   name: string;
 }
@@ -17,7 +17,7 @@ const ProductItem = ({ product }: { product: Product }) => {
   const { selectedProductIds, addProductId, removeProductId } =
     useProductStore();
   const isChecked = selectedProductIds.includes(product.id);
-
+  
   const handleSelectProduct = () => {
     if (isChecked) {
       removeProductId(product.id);

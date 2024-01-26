@@ -6,6 +6,7 @@ import SidebarLinkGroup from "./SidebarLinkGroup";
 import {
   BsAirplane,
   BsBox2Fill,
+  BsBoxes,
   BsCardImage,
   BsChevronDown,
   BsChevronLeft,
@@ -13,10 +14,16 @@ import {
   BsDoorOpen,
   BsGearFill,
   BsMenuApp,
+  BsPersonBadgeFill,
   BsPinMap,
   BsReceipt,
   BsTicketDetailedFill,
 } from "react-icons/bs";
+import { IoPerson } from "react-icons/io5";
+import { BiSolidDashboard } from "react-icons/bi";
+import { AiFillAlert } from "react-icons/ai";
+import { FaCheckDouble } from "react-icons/fa";
+
 import { useAuth } from "../../../context/AuthContext";
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -96,14 +103,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       </div>
       {/* <!-- SIDEBAR HEADER --> */}
 
-      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+      <div className="flex flex-col overflow-y-auto text-base duration-300 ease-linear no-scrollbar">
         {/* <!-- Sidebar Menu --> */}
         <nav className="px-4 py-4 mt-5 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-              MENU
-            </h3>
+            <h3 className="mb-4 ml-4 font-semibold text-bodydark2">MENU</h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
               <li>
@@ -114,7 +119,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >
-                  <BsMenuApp />
+                  <BiSolidDashboard />
                   Dashboard
                 </NavLink>
               </li>
@@ -126,7 +131,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     pathname.includes("users") && "bg-graydark dark:bg-meta-4"
                   }`}
                 >
-                  <BsReceipt />
+                  <IoPerson />
                   Users
                 </NavLink>
               </li>
@@ -137,7 +142,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     pathname.includes("plans") && "bg-graydark dark:bg-meta-4"
                   }`}
                 >
-                  <BsReceipt />
+                  <BsBox2Fill />
                   Plans
                 </NavLink>
               </li>
@@ -145,10 +150,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   to="/products"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("products") && "bg-graydark dark:bg-meta-4"
+                    pathname.includes("products") &&
+                    "bg-graydark dark:bg-meta-4"
                   }`}
                 >
-                  <BsReceipt />
+                  <BsBoxes />
                   Products
                 </NavLink>
               </li>
@@ -156,10 +162,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   to="/requests"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("requests") && "bg-graydark dark:bg-meta-4"
+                    pathname.includes("requests") &&
+                    "bg-graydark dark:bg-meta-4"
                   }`}
                 >
-                  <BsReceipt />
+                  <AiFillAlert />
                   Requests
                 </NavLink>
               </li>
@@ -167,11 +174,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   to="/approvals"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("approvals") && "bg-graydark dark:bg-meta-4"
+                    pathname.includes("approvals") &&
+                    "bg-graydark dark:bg-meta-4"
                   }`}
                 >
-                  <BsReceipt />
-                  Approvals
+                  <FaCheckDouble />
+                  My Approvals
                 </NavLink>
               </li>
               <li>
@@ -194,6 +202,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <button
               onClick={() => {
                 clearAuthToken();
+
                 navigate("/signin");
               }}
               className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-danger dark:hover:bg-danger ${

@@ -13,6 +13,8 @@ import Packages from "./pages/plans/Plans";
 import Plans from "./pages/plans/Plans";
 import CreatePlan from "./pages/plans/CreatePlan";
 import ViewEditPlan from "./pages/plans/ViewEditPlan";
+import Users from "./pages/users/Users";
+import Requests from "./pages/requests/Requests";
 
 function App() {
   //page refresh at any location is leading me to root page
@@ -43,6 +45,8 @@ function App() {
             <Route path="/plans" element={<Plans />} />
             <Route path="/plans/create" element={<CreatePlan />} />
             <Route path="/plans/view/:planId" element={<ViewEditPlan />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/requests" element={<Requests />} />
             
           </Route>
         </Routes>

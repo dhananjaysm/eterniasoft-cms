@@ -12,8 +12,9 @@ import { LOGIN_MUTATION } from "../../graphql/mutations";
 import Loader from "../../components/common/Loader";
 
 const SignIn = () => {
-  const { isAuthenticated, setAuthToken, setIsAuthenticated } = useAuth();
-  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const { isAuthenticated, setAuthToken, setIsAuthenticated, setUserId } =
+    useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -25,20 +26,29 @@ const SignIn = () => {
       navigate(from);
     }
   }, [isAuthenticated, navigate, location.state?.from?.pathname]);
+
+  const [login, { loading, error }] = useMutation(LOGIN_MUTATION, {
+    variables: {
+      loginInput: {
+        email: email,
+        password: password,
+      },
+    },
+    onCompleted: (data) => {
+      // Handle the response data, e.g., store the access_token
+      setAuthToken(data.login.access_token);
+      setUserId(data.login.userId);
+      // You might want to redirect the user or update the UI in some way
+    },
+    onError: (error) => {
+      // Handle the error, e.g., show an error message
+      console.error("Login error:", error.message);
+    },
+  });
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    try {
-      const { data } = await login({
-        variables: { loginInput: { email, password } },
-      });
-      if (data.login) {
-        setAuthToken(data.login["access_token"]);
-        setIsAuthenticated(true);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    login();
+   
   };
   return (
     <>
