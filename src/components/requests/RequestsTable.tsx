@@ -24,6 +24,7 @@ type Approval = {
 
 export type RequestType = {
   id: string;
+  requestId: number;
   requestType: string;
   user: User;
   plan: Plan;
@@ -145,7 +146,7 @@ const RequestsTable = ({ filter }: { filter: string }) => {
             exit="exit"
           >
             {/* Your form content here */}
-            <ViewRequestDrawer/>
+            <ViewRequestDrawer showForm={showForm} setShowForm={setShowForm} />
             {/* Form fields */}
           </motion.div>
         )}

@@ -1,8 +1,70 @@
 import { gql } from "@apollo/client";
+
+export const GET_USER_PROFILE_QUERY = gql`
+  query FindUserById($userId: String!) {
+    findUserById(userId: $userId) {
+      id
+      username
+      email
+      firstName
+      lastName
+      department
+      roles
+    }
+  }
+`;
+
+export const GET_COMPLETE_USER_PROFILE = gql`
+query FindUserById($userId: String!) {
+  findUserById(userId: $userId) {
+    id
+    username
+    email
+    firstName
+    lastName
+    department
+    roles
+    subscriptions {
+      id
+      subscriptionType
+      status
+      plan {
+        id
+        name
+        description
+        price
+        duration
+        status
+        billingCycle
+        autoRenew
+        trialPeriodDays
+        products {
+          id
+          name
+          price
+          description
+          maxUsers
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      startDate
+      endDate
+      renewalPeriod
+    }
+    createdAt
+    updatedAt
+  }
+}
+`
+
 export const GET_ALL_REQUESTS_QUERY = gql`
   query GetAllRequests {
     getAllRequests {
       id
+      requestId
       type
       user {
         id
@@ -49,6 +111,20 @@ export const GET_USERS_COUNT_QUERY = gql`
 export const GET_SUBS_COUNT_QUERY = gql`
   query Query {
     subsCount
+  }
+`;
+export const GET_SUBS_BY_DATERANGE = gql`
+  query GetSubscriptionsByDateRange(
+    $startDate: DateTime!
+    $endDate: DateTime!
+  ) {
+    getSubscriptionsByDateRange(startDate: $startDate, endDate: $endDate) {
+      id
+      subscriptionType
+      status
+      startDate
+      endDate
+    }
   }
 `;
 

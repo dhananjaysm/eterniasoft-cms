@@ -1,4 +1,6 @@
+import { useQuery } from "@apollo/client";
 import React, { createContext, useState, useContext, useEffect } from "react";
+import { GET_USER_PROFILE_QUERY } from "../graphql/query";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -8,6 +10,9 @@ interface AuthContextProps {
   clearAuthToken: () => void;
   userId: string;
   setUserId: (userId: string) => void;
+  userData?: any; // Optional type for user data
+  userLoading: boolean;
+  userError?: Error; // Optional type for error
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -47,7 +52,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem("authToken");
     setIsAuthenticated(false);
   };
-
+  // Use `skip` option to conditionally execute the query
+  const {
+    data: userData,
+    loading: userLoading,
+    error: userError,
+  } = useQuery(GET_USER_PROFILE_QUERY, {
+    variables: { userId },
+    skip: !isAuthenticated || !userId, // Skip the query if not authenticated or userId is not available
+  });
   return (
     <AuthContext.Provider
       value={{
@@ -58,6 +71,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         clearAuthToken,
         userId,
         setUserId: setAndStoreUserId,
+        userData,
+        userLoading,
+        userError,
       }}
     >
       {children}

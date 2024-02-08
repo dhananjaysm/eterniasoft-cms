@@ -15,6 +15,7 @@ import CreatePlan from "./pages/plans/CreatePlan";
 import ViewEditPlan from "./pages/plans/ViewEditPlan";
 import Users from "./pages/users/Users";
 import Requests from "./pages/requests/Requests";
+import ViewEditUser from "./pages/users/ViewEditUser";
 
 function App() {
   //page refresh at any location is leading me to root page
@@ -46,6 +47,7 @@ function App() {
             <Route path="/plans/create" element={<CreatePlan />} />
             <Route path="/plans/view/:planId" element={<ViewEditPlan />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/users/view/:userId" element={<ViewEditUser />} />
             <Route path="/requests" element={<Requests />} />
             
           </Route>

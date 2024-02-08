@@ -46,7 +46,7 @@ const ProductListing = () => {
           Create Product
         </button>
       </div>
-      <div className="flex flex-col gap-2 p-6.5 max-h-[400px] overflow-y-auto custom-scrollbar">
+      <div className="flex flex-col gap-2 p-6.5 h-full overflow-y-auto custom-scrollbar">
         {!loading ? (
           sortedProducts?.map((product: Product) => (
             <div key={product.id}>

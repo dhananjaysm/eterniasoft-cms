@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { RequestType } from "../components/requests/RequestsTable";
+import { User } from "../components/users/UsersTable";
 
 interface ProductStoreState {
   selectedProductIds: string[];
@@ -46,4 +47,24 @@ const useRequestStore = create<RequestStoreState>((set) => ({
   clearSelectedRequest: () => set({ selectedRequest: null }),
 }));
 
-export { useProductStore, useRequestStore };
+
+// Interface for the User Store State
+interface UserStoreState {
+  selectedUser: User | null; // The currently selected user or null if no user is selected
+  setSelectedUser: (user: User | null) => void; // Function to set the selected user
+  clearSelectedUser: () => void; // Function to clear the selected user
+}
+
+// Create the user store
+const useUserStore = create<UserStoreState>((set) => ({
+  selectedUser: null, // Initial state is no user selected
+
+  // Method to set the selected user
+  setSelectedUser: (user) => set({ selectedUser: user }),
+
+  // Method to clear the selected user
+  clearSelectedUser: () => set({ selectedUser: null }),
+}));
+
+export default useUserStore;
+export { useProductStore, useRequestStore,useUserStore };

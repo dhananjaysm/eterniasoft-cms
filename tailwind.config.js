@@ -23,7 +23,20 @@ export default {
         primary: "#3C50E0",
         secondary: "#80CAEE",
         stroke: "#E2E8F0",
-        gray: "#EFF4FB",
+        gray: {
+          DEFAULT: '#EFF4FB', // This sets the default gray to the specified color
+          // You can add additional shades as needed
+          '50': '#F7FAFC',    // Lighter gray
+          '100': '#EDF2F7',
+          '200': '#E2E8F0',
+          '300': '#CBD5E0',
+          '400': '#A0AEC0',
+          '500': '#718096',    // Mid-tone gray
+          '600': '#4A5568',
+          '700': '#2D3748',    // Darker gray
+          '800': '#1A202C',
+          '900': '#171923',
+        },
         graydark: "#333A48",
         "gray-2": "#F7F9FC",
         "gray-3": "#FAFAFA",

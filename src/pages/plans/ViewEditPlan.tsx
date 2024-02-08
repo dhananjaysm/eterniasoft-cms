@@ -18,14 +18,11 @@ const ViewEditPlan = () => {
     <>
       <Breadcrumb pageName="View/Edit Plan" />
       <div className="relative">
-        {" "}
-        {/* Relative positioning context */}
-        {/* Form and listing */}
         <div className="grid grid-cols-1 gap-1/2 sm:grid-cols-2">
-          <div className="flex flex-col gap-9">
+          <div className="flex flex-col h-full gap-9">
             <PlanForm plan={data?.findPlan} />
           </div>
-          <div className="flex flex-col gap-9">
+          <div className="flex flex-col h-full gap-9">
             <ProductListing />
           </div>
         </div>

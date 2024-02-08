@@ -3,8 +3,16 @@ import { useRequestStore } from "../../store/globalStore";
 import { useMutation } from "@apollo/client";
 import { APPROVE_REQUEST_MUTATION } from "../../graphql/mutations";
 import { useAuth } from "../../context/AuthContext";
+import { BsChevronBarRight } from "react-icons/bs";
+import { IoChevronForward } from "react-icons/io5";
 
-const ViewRequestDrawer = () => {
+const ViewRequestDrawer = ({
+  showForm,
+  setShowForm,
+}: {
+  showForm: boolean;
+  setShowForm: (show: boolean) => void;
+}) => {
   const { selectedRequest } = useRequestStore();
   const { userId } = useAuth();
   const [approveRequest, { data, loading, error }] = useMutation(
@@ -45,6 +53,10 @@ const ViewRequestDrawer = () => {
   return (
     <div className="bg-white border rounded-sm border-stroke shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+        <button onClick={() => setShowForm(false)}>
+          {" "}
+          <IoChevronForward className = "w-4 h-4" />
+        </button>
         <h3 className="font-medium text-black dark:text-white">
           Request:{selectedRequest?.id}
         </h3>
@@ -106,7 +118,7 @@ const ViewRequestDrawer = () => {
               new Date(selectedRequest?.updatedAt).toLocaleString()}
           </p>
         </div>
-        {isUserAnApprover && selectedRequest?.status !=="approved" && (
+        {isUserAnApprover && selectedRequest?.status !== "approved" && (
           <>
             <div>
               <label className="block mb-3 text-black dark:text-white">

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { User } from "./UsersTable";
 import ViewEditUserModal from "./ViewEditUserModal";
 import { RoleTag } from "./RoleTag";
+import { useNavigate } from "react-router";
+import useUserStore from "../../store/globalStore";
 
 const UserTableRow: React.FC<{ user: User }> = ({ user }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,23 +16,13 @@ const UserTableRow: React.FC<{ user: User }> = ({ user }) => {
     setIsModalOpen(false);
     // setSelectedItem(null);
   };
+  const navigate = useNavigate();
+  const {setSelectedUser} = useUserStore()
   return (
     <>
       <tr>
         <td className="w-px h-px whitespace-nowrap">
-          <div className="py-3 ps-6">
-            <label htmlFor="hs-at-with-checkboxes-1" className="flex">
-              <input
-                type="checkbox"
-                className="text-blue-600 border-gray-300 rounded shrink-0 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                id="hs-at-with-checkboxes-1"
-              />
-              <span className="sr-only">Checkbox</span>
-            </label>
-          </div>
-        </td>
-        <td className="w-px h-px whitespace-nowrap">
-          <div className="py-3 ps-6 lg:ps-3 xl:ps-0 pe-6">
+          <div className="py-3 ps-6 pe-6">
             <div className="flex items-center gap-x-3">
               <img
                 className="inline-block h-[2.375rem] w-[2.375rem] rounded-full"
@@ -85,10 +77,13 @@ const UserTableRow: React.FC<{ user: User }> = ({ user }) => {
           <div className="px-6 py-1.5">
             <button
               //   onClick={openModal}
-              disabled
-              className="inline-flex items-center text-sm font-medium text-blue-600 cursor-not-allowed gap-x-1 decoration-2 hover:underline dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+              onClick={() => {
+                
+                navigate(`/users/view/${user?.id}`)
+              }}
+              className="inline-flex items-center text-sm font-medium text-blue-600 gap-x-1 decoration-2 hover:underline dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
             >
-              Edit
+              View
             </button>
           </div>
         </td>
@@ -99,3 +94,43 @@ const UserTableRow: React.FC<{ user: User }> = ({ user }) => {
 };
 
 export default UserTableRow;
+export const UserSkeleton = () => {
+  return (
+    <tr>
+      <td className="w-px h-px whitespace-nowrap">
+        <div className="py-3 ps-6 lg:ps-3 xl:ps-0 pe-6">
+          <div className="flex items-center gap-x-3">
+            <div className="w-8 h-8 rounded-full skeleton-box animate-pulse"></div>
+            <div className="grow">
+              <div className="w-48 h-8 skeleton-box animate-pulse"></div>
+              <div className="w-32 h-4 skeleton-box animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td className="h-px w-72 whitespace-nowrap">
+        <div className="px-6 py-3">
+          <div className="flex flex-wrap">
+            <div className="w-48 h-6 rounded-full skeleton-box animate-pulse" />
+            <div className="w-48 h-6 ml-2 rounded-full skeleton-box animate-pulse" />
+          </div>
+        </div>
+      </td>
+      <td className="w-px h-px whitespace-nowrap">
+        <div className="px-6 py-3">
+          <div className="w-24 h-8 rounded-full skeleton-box animate-pulse"></div>
+        </div>
+      </td>
+      <td className="w-px h-px whitespace-nowrap">
+        <div className="px-6 py-3">
+          <div className="w-48 h-8 skeleton-box animate-pulse"></div>
+        </div>
+      </td>
+      <td className="w-px h-px whitespace-nowrap">
+        <div className="px-6 py-1.5">
+          <div className="w-32 h-8 rounded-full skeleton-box animate-pulse"></div>
+        </div>
+      </td>
+    </tr>
+  );
+};

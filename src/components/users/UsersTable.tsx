@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import UserTableRow from "./UserTableRow";
+import UserTableRow, { UserSkeleton } from "./UserTableRow";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../graphql/query";
 import AddUserModal from "./AddUserModal";
@@ -17,7 +17,6 @@ export type User = {
 };
 const UsersTable = () => {
   const { data, loading, error } = useQuery(GET_ALL_USERS);
-  if (loading) return <>loading...</>;
   const users = data?.findAllUsers;
   // const [isModalOpen, setIsModalOpen] = useState(false);
   // const openModal = () => {
@@ -81,24 +80,7 @@ const UsersTable = () => {
                 <table className="min-w-full divide-y divide-body/20 dark:divide-gray-700">
                   <thead className="bg-gray-50 dark:bg-slate-800">
                     <tr>
-                      <th scope="col" className="py-3 ps-6 text-start">
-                        <label
-                          htmlFor="hs-at-with-checkboxes-main"
-                          className="flex"
-                        >
-                          <input
-                            type="checkbox"
-                            className="text-blue-600 rounded border-body/20 shrink-0 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                            id="hs-at-with-checkboxes-main"
-                          />
-                          <span className="sr-only">Checkbox</span>
-                        </label>
-                      </th>
-
-                      <th
-                        scope="col"
-                        className="py-3 ps-6 lg:ps-3 xl:ps-0 pe-6 text-start"
-                      >
+                      <th scope="col" className="py-3 ps-6 pe-6 text-start">
                         <div className="flex items-center gap-x-2">
                           <span className="text-xs font-semibold tracking-wide text-gray-800 uppercase dark:text-gray-200">
                             Name
@@ -135,10 +117,13 @@ const UsersTable = () => {
                   </thead>
 
                   <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {users &&
+                    {!loading ? (
                       users.map((user: User) => (
                         <UserTableRow key={user.id} user={user} />
-                      ))}
+                      ))
+                    ) : (
+                      <UserSkeleton />
+                    )}
                   </tbody>
                 </table>
 
